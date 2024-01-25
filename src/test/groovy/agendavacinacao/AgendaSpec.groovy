@@ -6,6 +6,7 @@ import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
 import java.sql.Time
+import java.time.LocalDate
 
 class AgendaSpec extends Specification implements DomainUnitTest<Agenda> {
 
@@ -13,7 +14,7 @@ class AgendaSpec extends Specification implements DomainUnitTest<Agenda> {
         given:
         Usuario usuario = new Usuario(
                 nome: "John Doe",
-                dataNascimento: Calendar.getInstance(),
+                dataNascimento: LocalDate.now(),
                 sexo: 'M',
                 logradouro: "Street Test",
                 numero: 123,
@@ -33,7 +34,7 @@ class AgendaSpec extends Specification implements DomainUnitTest<Agenda> {
         Agenda agenda = new Agenda(
                 usuario: usuario,
                 vacina: vacina,
-                data: Calendar.getInstance(),
+                data: LocalDate.now(),
                 hora: new Time(System.currentTimeMillis()),
                 situacao: SituacaoEnum.AGENDADO,
                 dataSituacao: null,

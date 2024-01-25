@@ -4,14 +4,15 @@ import enums.SituacaoEnum
 import grails.gorm.annotation.Entity
 
 import java.sql.Time
+import java.time.LocalDate
 
 @Entity
 class Agenda {
 
-    Calendar data
+    LocalDate data
     Time hora
     SituacaoEnum situacao
-    Calendar dataSituacao
+    LocalDate dataSituacao
     String observacoes
 
     static constraints = {

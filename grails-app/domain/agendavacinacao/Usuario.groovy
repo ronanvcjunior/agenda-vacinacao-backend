@@ -2,12 +2,14 @@ package agendavacinacao
 
 import grails.gorm.annotation.Entity
 
+import java.time.LocalDate
+
 @Entity
 class Usuario {
 
     String nome
-    Calendar dataNascimento
-    char sexo
+    LocalDate dataNascimento
+    String sexo
     String logradouro
     BigDecimal numero
     String setor

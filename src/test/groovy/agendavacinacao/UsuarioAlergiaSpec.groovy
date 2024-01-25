@@ -3,13 +3,15 @@ package agendavacinacao
 import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
+import java.time.LocalDate
+
 class UsuarioAlergiaSpec extends Specification implements DomainUnitTest<UsuarioAlergia> {
 
     void "deve criar um novo usuário com alergia com dados válidos"() {
         given:
         Usuario usuario = new Usuario(
                 nome: "John Doe",
-                dataNascimento: Calendar.getInstance(),
+                dataNascimento: LocalDate.now(),
                 sexo: 'M',
                 logradouro: "Street Test",
                 numero: 123,
