@@ -7,14 +7,6 @@ import org.hibernate.service.spi.ServiceException
 @Transactional
 class UsuarioService {
 
-    Integer count() {
-        try {
-            return Usuario.count()
-        } catch (Exception e) {
-            throw new ServiceException("Erro ao contar todos usuários.", e)
-        }
-    }
-
     Usuario cadastrarUsuario(Usuario usuario) {
         try {
             usuario.validate()
