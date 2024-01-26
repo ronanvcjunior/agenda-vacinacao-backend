@@ -69,12 +69,7 @@ class AlergiaService {
 
     List<Alergia> buscarTodasAlergias(Map<String, Object> params) {
         try {
-            List<Alergia> result = Alergia.createCriteria().list(params) {
-                maxResults(params.max)
-                firstResult(params.offset)
-            }
-
-            return result
+            return Alergia.findAll(params)
         } catch (Exception e) {
             throw new ServiceException("Erro ao buscar todas alergias.", e)
         }

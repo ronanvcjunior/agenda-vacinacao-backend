@@ -16,6 +16,8 @@ class Usuario {
     String cidade
     String uf
 
+    static hasMany = [alergias: Alergia]
+
     static constraints = {
         nome nullable: false, blank: false, maxSize: 60
         dataNascimento nullable: false
@@ -34,6 +36,4 @@ class Usuario {
         sexo sqlType: 'CHAR(1)'
         uf sqlType: 'CHAR(2)'
     }
-
-    static hasMany = [usuarioAlergia: UsuarioAlergia]
 }

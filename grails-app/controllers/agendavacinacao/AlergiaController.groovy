@@ -17,14 +17,14 @@ class AlergiaController {
 
     AlergiaService alergiaService
 
-    static responseFormats = ['json', 'xml']
+    static responseFormats = ['json']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer page, Integer perPage) {
         Integer pageNumber = page ?: 1
-        params.max = perPage ?: 10
+        params.max = perPage
 
-        params.offset = (pageNumber - 1) * params.max
+        params.offset = perPage ? (pageNumber - 1) * params.max : null
 
         PagedResultList results = alergiaService.buscarTodasAlergias(params)
 
@@ -38,7 +38,7 @@ class AlergiaController {
     @Transactional
     def save(Alergia alergia) {
         try {
-            if (alergia == null) {
+            if (!alergia) {
                 render status: NOT_FOUND
                 return
             }
@@ -53,7 +53,7 @@ class AlergiaController {
     @Transactional
     def update(Alergia alergia) {
         try {
-            if (alergia == null) {
+            if (!alergia) {
                 render status: NOT_FOUND
                 return
             }

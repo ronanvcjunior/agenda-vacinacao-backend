@@ -1,7 +1,6 @@
 package agendavacinacao
 
 import grails.gorm.PagedResultList
-import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
@@ -15,18 +14,23 @@ class UsuarioController {
 
     UsuarioService usuarioService
 
-    static responseFormats = ['json', 'xml']
+    static responseFormats = ['json']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer page, Integer perPage) {
         Integer pageNumber = page ?: 1
-        params.max = perPage ?: 10
+        params.max = perPage
 
-        params.offset = (pageNumber - 1) * params.max
+        params.offset = perPage ? (pageNumber - 1) * params.max : null
 
         PagedResultList results = usuarioService.buscarTodosUsuarios(params)
 
-        respond results, model: [usuarioCount: results.size()]
+        if (!results) {
+            render status: NOT_FOUND
+            return
+        }
+
+        respond results, model: [usuarios: results], view: "usuarios"
     }
 
 
@@ -37,7 +41,7 @@ class UsuarioController {
     @Transactional
     def save(Usuario usuario) {
         try {
-            if (usuario == null) {
+            if (!usuario) {
                 render status: NOT_FOUND
                 return
             }
@@ -52,7 +56,7 @@ class UsuarioController {
     @Transactional
     def update(Usuario usuario) {
         try {
-            if (usuario == null) {
+            if (!usuario) {
                 render status: NOT_FOUND
                 return
             }

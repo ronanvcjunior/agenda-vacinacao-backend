@@ -16,6 +16,7 @@ class UsuarioService {
 
             usuario.save(flush: true)
 
+
             return usuario
         } catch (ValidationException e) {
             throw new ValidationException(e.message, e.errors)
@@ -41,6 +42,7 @@ class UsuarioService {
 
             usuario.save(flush: true, failOnError: true)
 
+
             return usuario
         } catch (ValidationException e) {
             throw new ValidationException(e.message, e.errors)
@@ -64,12 +66,7 @@ class UsuarioService {
 
     List<Usuario> buscarTodosUsuarios(Map<String, Object> params) {
         try {
-            List<Usuario> result = Usuario.createCriteria().list(params) {
-                maxResults(params.max)
-                firstResult(params.offset)
-            }
-
-            return result
+            return Usuario.findAll(params)
         } catch (Exception e) {
             throw new ServiceException("Erro ao buscar todos usuários.", e)
         }
