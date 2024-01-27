@@ -1,7 +1,7 @@
 package agendavacinacao
 
 import grails.gorm.PagedResultList
-
+import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
@@ -11,9 +11,9 @@ import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
 
 @ReadOnly
-class AlergiaController {
+class VacinaController {
 
-    AlergiaService alergiaService
+    VacinaService vacinaService
 
     static responseFormats = ['json']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
@@ -24,48 +24,55 @@ class AlergiaController {
 
         params.offset = perPage ? (pageNumber - 1) * params.max : null
 
-        PagedResultList results = alergiaService.buscarTodasAlergias(params)
+        PagedResultList results = vacinaService.buscarTodasVacinas(params)
 
-        respond results, model: [alergiaCount: results.size()]
+        if (!results) {
+            render status: NOT_FOUND
+            return
+        }
+
+        respond results, model:[vacinaCount: results.size()]
     }
 
     def show(Long id) {
-        respond alergiaService.buscarAlergia(id)
+        respond vacinaService.buscarVacina(id)
     }
 
     @Transactional
-    def save(Alergia alergia) {
+    def save(Vacina vacina) {
         try {
-            if (!alergia) {
+            if (!vacina) {
                 render status: NOT_FOUND
                 return
             }
 
-            alergiaService.cadastrarAlergia(alergia)
-            respond alergia, [status: CREATED, view:"show"]
-        } catch (Exception e) {
-            respond e
+            vacinaService.cadastrarVacina(vacina)
+
+            respond vacina, [status: CREATED, view:"show"]
+        } catch (ValidationException e) {
+            respond vacina.errors
         }
     }
 
     @Transactional
-    def update(Alergia alergia) {
+    def update(Vacina vacina) {
         try {
-            if (!alergia) {
+            if (!vacina) {
                 render status: NOT_FOUND
                 return
             }
 
-            alergiaService.atualizarAlergia(alergia)
-            respond alergia, [status: OK, view:"show"]
-        } catch (Exception e) {
+            vacinaService.atualizarVacina(vacina)
+
+            respond vacina, [status: OK, view:"show"]
+        } catch (ValidationException e) {
             respond e
         }
     }
 
     @Transactional
     def delete(Long id) {
-        if (!id || !alergiaService.excluirAlergia(id)) {
+        if (!id || !vacinaService.excluirVacina(id)) {
             render status: NOT_FOUND
             return
         }

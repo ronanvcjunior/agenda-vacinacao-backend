@@ -3,7 +3,6 @@ package agendavacinacao
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 import org.hibernate.service.spi.ServiceException
-import utils.StringFormatter
 
 @Transactional
 class AlergiaService {
@@ -14,8 +13,6 @@ class AlergiaService {
             if (alergia.hasErrors()) {
                 throw new ValidationException("Erro de validação ao cadastrar alergia.", alergia.errors)
             }
-
-            alergia.nome = StringFormatter.capitalizarTodaString(alergia.nome)
 
             alergia.save(flush: true)
 
@@ -41,8 +38,6 @@ class AlergiaService {
             if (alergia.hasErrors()) {
                 throw new ValidationException("Erro de validação ao atualizar alergia.", alergia.errors)
             }
-
-            alergia.nome = StringFormatter.capitalizarTodaString(alergia.nome)
 
             alergia.save(flush: true, failOnError: true)
 
