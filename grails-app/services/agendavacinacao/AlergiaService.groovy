@@ -2,6 +2,7 @@ package agendavacinacao
 
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
+import org.grails.web.json.JSONArray
 import org.hibernate.service.spi.ServiceException
 
 @Transactional
@@ -57,6 +58,19 @@ class AlergiaService {
             }
 
             return alergia
+        } catch (Exception e) {
+            throw new ServiceException("Erro ao excluir alergia.", e)
+        }
+    }
+
+    List<Alergia> excluirListaAlergias(JSONArray requestBody) {
+        List<Alergia> alergias = requestBody.collect { this.buscarAlergia(it["id"] as Long) }
+        try {
+            alergias.each {
+                it.delete(flush: true)
+            }
+
+            return alergias
         } catch (Exception e) {
             throw new ServiceException("Erro ao excluir alergia.", e)
         }
