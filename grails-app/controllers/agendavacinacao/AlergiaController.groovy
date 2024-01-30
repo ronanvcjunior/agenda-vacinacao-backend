@@ -28,7 +28,7 @@ class AlergiaController {
 
         PagedResultList results = alergiaService.buscarTodasAlergias(params)
 
-        respond results, model: [alergiaCount: results.size()]
+        respond results, model: [alergias: results, totalRecords: alergiaService.count()], view: "alergias"
     }
 
     def show(Long id) {
@@ -79,7 +79,7 @@ class AlergiaController {
     def deleteList() {
         JSONArray requestBody = request.JSON as JSONArray
 
-         if (requestBody) {
+         if (!requestBody) {
             render status: BAD_REQUEST
             return
         }

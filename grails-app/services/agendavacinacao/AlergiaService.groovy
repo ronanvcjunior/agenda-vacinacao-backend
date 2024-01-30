@@ -8,6 +8,10 @@ import org.hibernate.service.spi.ServiceException
 @Transactional
 class AlergiaService {
 
+    Integer count() {
+        return Alergia.count()
+    }
+
     Alergia cadastrarAlergia(Alergia alergia) {
         try {
             alergia.validate()

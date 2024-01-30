@@ -7,6 +7,10 @@ import org.hibernate.service.spi.ServiceException
 @Transactional
 class UsuarioService {
 
+    Integer count() {
+        return Usuario.count()
+    }
+
     Usuario cadastrarUsuario(Usuario usuario) {
         try {
             usuario.validate()
