@@ -1,5 +1,6 @@
 model {
     List<Usuario> usuarios
+    Integer totalRecords
 }
 
-json g.render(usuarios)
+json g.render([content: usuarios, totalRecords: totalRecords])

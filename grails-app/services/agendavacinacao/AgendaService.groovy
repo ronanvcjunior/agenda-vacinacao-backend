@@ -2,10 +2,15 @@ package agendavacinacao
 
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
+import org.grails.web.json.JSONArray
 import org.hibernate.service.spi.ServiceException
 
 @Transactional
 class AgendaService {
+
+    Integer count() {
+        return Agenda.count()
+    }
 
     List<Agenda> cadastrarAgenda(Agenda agenda) {
         try {
@@ -85,6 +90,19 @@ class AgendaService {
             return agenda
         } catch (Exception e) {
             throw new ServiceException("Erro ao excluir agenda.", e)
+        }
+    }
+
+    List<Agenda> excluirListaAgendas(JSONArray requestBody) {
+        List<Agenda> agendas = requestBody.collect { this.buscarAgenda(it["id"] as Long) }
+        try {
+            agendas.each {
+                it.delete(flush: true)
+            }
+
+            return agendas
+        } catch (Exception e) {
+            throw new ServiceException("Erro ao excluir lista de agendas.", e)
         }
     }
 

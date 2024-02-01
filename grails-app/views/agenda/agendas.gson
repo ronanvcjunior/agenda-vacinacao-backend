@@ -1,0 +1,6 @@
+model {
+    List<Agenda> agendas
+    Integer totalRecords
+}
+
+json g.render([content: agendas, totalRecords: totalRecords], [deep:true])

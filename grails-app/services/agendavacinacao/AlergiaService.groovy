@@ -76,7 +76,7 @@ class AlergiaService {
 
             return alergias
         } catch (Exception e) {
-            throw new ServiceException("Erro ao excluir alergia.", e)
+            throw new ServiceException("Erro ao excluir lista de alergias.", e)
         }
     }
 

@@ -3,10 +3,15 @@ package agendavacinacao
 import enums.PeriodicidadeEnum
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
+import org.grails.web.json.JSONArray
 import org.hibernate.service.spi.ServiceException
 
 @Transactional
 class VacinaService {
+
+    Integer count() {
+        return Vacina.count()
+    }
 
     Vacina cadastrarVacina(Vacina vacina) {
         try {
@@ -60,6 +65,19 @@ class VacinaService {
             return vacina
         } catch (Exception e) {
             throw new ServiceException("Erro ao excluir vacina.", e)
+        }
+    }
+
+    List<Vacina> excluirListaVacinas(JSONArray requestBody) {
+        List<Vacina> vacinas = requestBody.collect { this.buscarVacina(it["id"] as Long) }
+        try {
+            vacinas.each {
+                it.delete(flush: true)
+            }
+
+            return vacinas
+        } catch (Exception e) {
+            throw new ServiceException("Erro ao excluir lista de vacinas.", e)
         }
     }
 

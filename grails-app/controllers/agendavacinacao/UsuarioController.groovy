@@ -1,6 +1,9 @@
 package agendavacinacao
 
 import grails.gorm.PagedResultList
+import org.grails.web.json.JSONArray
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
@@ -30,7 +33,7 @@ class UsuarioController {
             return
         }
 
-        respond results, model: [usuarios: results], view: "usuarios"
+        respond results, model: [usuarios: results, totalRecords: usuarioService.count()], view: "usuarios"
     }
 
     def show(Long id) {
@@ -70,6 +73,23 @@ class UsuarioController {
     @Transactional
     def delete(Long id) {
         if (!id || !usuarioService.excluirUsuario(id)) {
+            render status: NOT_FOUND
+            return
+        }
+
+        render status: NO_CONTENT
+    }
+
+    @Transactional
+    def deleteList() {
+        JSONArray requestBody = request.JSON as JSONArray
+
+        if (!requestBody) {
+            render status: BAD_REQUEST
+            return
+        }
+
+        if (!usuarioService.excluirListaUsuarios(requestBody)) {
             render status: NOT_FOUND
             return
         }

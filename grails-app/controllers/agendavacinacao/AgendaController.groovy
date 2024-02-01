@@ -3,7 +3,9 @@ package agendavacinacao
 import grails.gorm.PagedResultList
 import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
+import org.grails.web.json.JSONArray
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
@@ -30,7 +32,7 @@ class AgendaController {
             return
         }
 
-        respond results, model: [agendaCount: results.size()]
+        respond results, model: [agendas: results, totalRecords: agendaService.count()], view: "agendas"
     }
 
     def show(Long id) {
@@ -70,6 +72,23 @@ class AgendaController {
     @Transactional
     def delete(Long id) {
         if (!id || !agendaService.excluirAgenda(id)) {
+            render status: NOT_FOUND
+            return
+        }
+
+        render status: NO_CONTENT
+    }
+
+    @Transactional
+    def deleteList() {
+        JSONArray requestBody = request.JSON as JSONArray
+
+        if (!requestBody) {
+            render status: BAD_REQUEST
+            return
+        }
+
+        if (!agendaService.excluirListaAgendas(requestBody)) {
             render status: NOT_FOUND
             return
         }

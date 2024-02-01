@@ -2,6 +2,7 @@ package agendavacinacao
 
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
+import org.grails.web.json.JSONArray
 import org.hibernate.service.spi.ServiceException
 
 @Transactional
@@ -65,6 +66,19 @@ class UsuarioService {
             return usuario
         } catch (Exception e) {
             throw new ServiceException("Erro ao excluir usuário.", e)
+        }
+    }
+
+    List<Usuario> excluirListaUsuarios(JSONArray requestBody) {
+        List<Usuario> usuarios = requestBody.collect { this.buscarUsuario(it["id"] as Long) }
+        try {
+            usuarios.each {
+                it.delete(flush: true)
+            }
+
+            return usuarios
+        } catch (Exception e) {
+            throw new ServiceException("Erro ao excluir lista de usuarios.", e)
         }
     }
 
