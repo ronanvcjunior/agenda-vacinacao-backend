@@ -1,0 +1,4 @@
+model {
+    Agenda agenda
+}
+json g.render(agenda, [deep:true])
