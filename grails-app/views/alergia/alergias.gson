@@ -1,0 +1,6 @@
+model {
+    List<Alergia> alergias
+    Integer totalRecords
+}
+
+json g.render([content: alergias, totalRecords: totalRecords])
